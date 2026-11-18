@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>채운 사각형과 원호 그리기</title>
+</head>
+<body>
+<h3>채운 사각형과 원호 그리기</h3>
+<hr>
+<canvas id="myCanvas" style="background-color: aliceblue;" width="180" height="420"></canvas>
+<script>
+let canvas = document.getElementById("myCanvas");
+let context = canvas.getContext("2d");
+
+// 1. fillRect()로 외곽선 없이 색으로 채운 사각형 그리기
+context.fillStyle = "violet";
+context.fillRect(20, 20, 100, 100); // 채운 사각형 그리기
+
+// 2. fill()로 사각형 내부 칠하기 + 외곽선 함께 그리기
+context.beginPath();
+context.rect(20, 150, 100, 100); // 경로에 사각형 삽입
+context.fillStyle = "violet";
+context.fill(); // 사각형 내부 칠하기
+
+// 사각형 외곽선 그리기
+context.strokeStyle = "gray";
+context.lineWidth = 10;
+context.stroke(); // 사각형 외곽선 그리기
+
+// 3. fill()로 부채꼴(원호) 내부 칠하기
+context.beginPath();
+context.moveTo(80, 340); // 부채꼴을 만들기 위해 중심점으로 이동
+context.arc(80, 340, 50, 0, 1.5 * Math.PI); // 경로에 원호 삽입
+context.closePath(); // 중심점과 원호의 끝점을 연결하여 부채꼴 모양 경로 완성
+
+context.fillStyle = "yellowgreen"; // 일반 반각 따옴표로 수정
+context.fill(); // 부채꼴 내부 칠하기
+
+// 원호(부채꼴) 외곽선 그리기
+context.strokeStyle = "gray"; // 일반 반각 따옴표로 수정
+context.lineWidth = 5; // 두께가 너무 두꺼우면 모양이 찌그러지므로 적당히 조절 (선택사항)
+context.stroke(); // 부채꼴 외곽선 그리기
+</script>
+</body>
+</html>

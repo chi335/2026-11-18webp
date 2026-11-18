@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>원호 그리기</title>
+</head>
+<body>
+<h3>원호 그리기</h3>
+<hr>
+<canvas id="myCanvas" style="background-color: aliceblue;" width="200" height="150"></canvas>
+<script>
+let canvas = document.getElementById("myCanvas");
+let context = canvas.getContext("2d");
+
+// 1. 첫 번째 원호 (마젠타 색상, 시계 방향)
+context.beginPath(); // 빈 경로 구성
+context.strokeStyle = "magenta";
+context.lineWidth = 3; // 선을 조금 더 두껍게 설정
+context.arc(100, 70, 30, 0, 1.5 * Math.PI, false); // 원호 경로 추가
+context.stroke(); // 경로에 있는 원호를 캔버스에 그린다
+
+// 2. 두 번째 원호 (파란색, 반시계 방향)
+context.beginPath(); // 새로운 경로 시작
+context.strokeStyle = "blue";
+context.arc(100, 70, 50, Math.PI / 2, Math.PI, true); // 원호 경로 추가
+context.stroke(); // 경로에 있는 원호를 캔버스에 그린다
+</script>
+</body>
+</html>
