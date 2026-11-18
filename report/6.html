@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>폼으로 원호 그리기</title>
+    <style>
+        .input-form {
+            background-color: #f0f0f0;
+            padding: 10px;
+            width: 480px;
+            margin-bottom: 10px;
+        }
+        .input-form td {
+            padding: 3px 8px;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <h3>폼으로 원호 그리기</h3>
+    <hr>
+
+    <!-- 입력 폼 영역 -->
+    <table class="input-form">
+        <tr>
+            <td>x <input type="number" id="x" value="350"></td>
+            <td>y <input type="number" id="y" value="100"></td>
+        </tr>
+        <tr>
+            <td>반지름 <input type="number" id="radius" value="100"></td>
+            <td>방향 
+                <select id="direction">
+                    <option value="false">시계방향</option>
+                    <option value="true">반시계방향</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>시작각도 <input type="number" id="startAngle" value="180"></td>
+            <td>끝각도 <input type="number" id="endAngle" value="360"></td>
+        </tr>
+        <tr>
+            <td>선굵기 <input type="number" id="lineWidth" value="20"></td>
+            <td>선색 <input type="color" id="strokeColor" value="#403000"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: right;">
+                <button onclick="drawArc()">그리기</button>
+                <button onclick="clearCanvas()">지우기</button>
+            </td>
+        </tr>
+    </table>
+
+    <!-- 캔버스 -->
+    <canvas id="myCanvas" width="500" height="250" style="background-color: aliceblue; border: 1px solid #ccc;"></canvas>
+
+    <script>
+        let canvas = document.getElementById("myCanvas");
+        let context = canvas.getContext("2d");
+
+        function drawArc() {
+            let x = Number(document.getElementById("x").value);
+            let y = Number(document.getElementById("y").value);
+            let radius = Number(document.getElementById("radius").value);
+            
+            // 각도(도, degree)를 라디안(radian)으로 변환: $\theta_{\text{rad}} = \theta_{\text{deg}} \times \frac{\pi}{180}$
+            let startDeg = Number(document.getElementById("startAngle").value);
+            let endDeg = Number(document.getElementById("endAngle").value);
+            let startAngleRad = (startDeg * Math.PI) / 180;
+            let endAngleRad = (endDeg * Math.PI) / 180;
+
+            // 반시계방향 여부 (true/false)
+            let counterclockwise = (document.getElementById("direction").value === "true");
+            let lineWidth = Number(document.getElementById("lineWidth").value);
+            let color = document.getElementById("strokeColor").value;
+
+            context.beginPath();
+            context.arc(x, y, radius, startAngleRad, endAngleRad, counterclockwise);
+            context.lineWidth = lineWidth;
+            context.strokeStyle = color;
+            context.stroke();
+        }
+
+        // 지우기 버튼 함수
+        function clearCanvas() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>폼으로 도형 그리기</title>
+    <style>
+        .input-form {
+            background-color: #f0f0f0;
+            padding: 10px;
+            width: 430px;
+            margin-bottom: 10px;
+        }
+        .input-form td {
+            padding: 3px 8px;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <h3>폼으로 사각형 그리기</h3>
+    <hr>
+
+    <!-- 입력 폼 테이블 -->
+    <table class="input-form">
+        <tr>
+            <td>x <input type="number" id="x" value="100"></td>
+            <td>y <input type="number" id="y" value="100"></td>
+        </tr>
+        <tr>
+            <td>width <input type="number" id="w" value="250"></td>
+            <td>height <input type="number" id="h" value="50"></td>
+        </tr>
+        <tr>
+            <td>선굵기 <input type="number" id="lineWidth" value="10"></td>
+            <td>선색 <input type="color" id="strokeColor" value="#800080"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: right;">
+                <button onclick="drawRect()">그리기</button>
+                <button onclick="clearCanvas()">지우기</button>
+            </td>
+        </tr>
+    </table>
+
+    <!-- 캔버스 -->
+    <canvas id="myCanvas" width="450" height="300" style="background-color: aliceblue; border: 1px solid #ccc;"></canvas>
+
+    <script>
+        let canvas = document.getElementById("myCanvas");
+        let context = canvas.getContext("2d");
+
+        // 사각형 그리기 함수
+        function drawRect() {
+            let x = Number(document.getElementById("x").value);
+            let y = Number(document.getElementById("y").value);
+            let w = Number(document.getElementById("w").value);
+            let h = Number(document.getElementById("h").value);
+            let lineWidth = Number(document.getElementById("lineWidth").value);
+            let color = document.getElementById("strokeColor").value;
+
+            context.beginPath();
+            context.lineWidth = lineWidth;
+            context.strokeStyle = color;
+            context.strokeRect(x, y, w, h); // 빈 사각형 외곽선 그리기
+        }
+
+        // 캔버스 모두 지우기 함수
+        function clearCanvas() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>

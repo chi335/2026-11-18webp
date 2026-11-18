@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>mousedown과 mouseup으로 선 그리기</title>
+</head>
+<body>
+    <h3>mousedown과 mouseup으로 선 그리기</h3>
+    <hr>
+    <canvas id="myCanvas" width="500" height="300" style="background-color: aliceblue; border: 1px solid #ccc;"></canvas>
+
+    <script>
+        let canvas = document.getElementById("myCanvas");
+        let context = canvas.getContext("2d");
+
+        let startX = 0;
+        let startY = 0;
+        let isDrawing = false; // 마우스 클릭 상태 여부
+
+        // 1. 마우스 누름 이벤트: 시작 좌표 저장 및 이전 캔버스 지우기
+        canvas.onmousedown = function (e) {
+            startX = e.offsetX;
+            startY = e.offsetY;
+            isDrawing = true;
+
+            // 마우스를 누르면 이전 선은 지워짐 (문제 조건)
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        };
+
+        // 2. 마우스 이동 이벤트: 드래그하는 동안 선 모양이 계속 보이도록 캔버스를 갱신
+        canvas.onmousemove = function (e) {
+            if (!isDrawing) return; // 마우스 클릭 상태가 아니면 이동 무시
+
+            let currentX = e.offsetX;
+            let currentY = e.offsetY;
+
+            // 실시간 갱신을 위해 캔버스를 지우고 다시 그림
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            context.beginPath();
+            context.moveTo(startX, startY);
+            context.lineTo(currentX, currentY);
+            context.lineWidth = 3;
+            context.strokeStyle = "navy";
+            context.stroke();
+        };
+
+        // 3. 마우스 떼기 이벤트: 그려진 선을 확정하고 드래그 종료
+        canvas.onmouseup = function (e) {
+            isDrawing = false;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>캔버스에 마우스 드래깅으로 그림 그리기</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            background-color: aliceblue;
+            cursor: crosshair;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        input[type="number"] {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h3>마우스를 누른 채 드래깅하여 그림을 그려 보세요</h3>
+    <hr>
+
+    <!-- 캔버스 영역 -->
+    <canvas id="myCanvas" width="500" height="350"></canvas>
+
+    <!-- 하단 컨트롤 영역 -->
+    <div class="controls">
+        선굵기 : <input type="number" id="lineWidth" value="2" min="1" max="30">
+        선 색 : <input type="color" id="strokeColor" value="#000000">
+    </div>
+
+    <script>
+        let canvas = document.getElementById("myCanvas");
+        let context = canvas.getContext("2d");
+
+        let drawing = false; // 드래그 중인지 여부
+        let lastX = 0;
+        let lastY = 0;
+
+        // 마우스 다운: 그림 그리기 시작
+        canvas.onmousedown = function (e) {
+            drawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        };
+
+        // 마우스 이동: 마우스를 누르고 있을 때만 선을 그림
+        canvas.onmousemove = function (e) {
+            if (!drawing) return;
+
+            let curX = e.offsetX;
+            let curY = e.offsetY;
+
+            let lineWidth = document.getElementById("lineWidth").value;
+            let strokeColor = document.getElementById("strokeColor").value;
+
+            context.beginPath();
+            context.moveTo(lastX, lastY);
+            context.lineTo(curX, curY);
+
+            context.lineWidth = lineWidth;
+            context.strokeStyle = strokeColor;
+            context.lineCap = "round"; // 선 연결 부위를 부드럽게 라운딩
+            context.stroke();
+
+            // 이전 위치 갱신
+            lastX = curX;
+            lastY = curY;
+        };
+
+        // 마우스 떼거나 캔버스를 벗어날 때 그리기 중단
+        canvas.onmouseup = function () {
+            drawing = false;
+        };
+        canvas.onmouseout = function () {
+            drawing = false;
+        };
+    </script>
+</body>
+</html>

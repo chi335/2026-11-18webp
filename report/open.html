@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>캔버스에 파이 차트 그리기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .input-container {
+            margin-bottom: 15px;
+        }
+        input[type="number"] {
+            width: 50px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <h3>학점 별로 학생 수를 입력하면 파이 차트로 비율 그리기</h3>
+    <hr>
+
+    <!-- 입력 창 및 버튼 -->
+    <div class="input-container">
+        A <input type="number" id="gradeA" value="10"> 명
+        B <input type="number" id="gradeB" value="20"> 명
+        C <input type="number" id="gradeC" value="15"> 명
+        D <input type="number" id="gradeD" value="2"> 명
+        F <input type="number" id="gradeF" value="2"> 명
+        <button onclick="drawChart()">차트그리기</button>
+    </div>
+
+    <!-- 캔버스 영역 -->
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+
+    <script>
+        // 교재 힌트에 명시된 색상 및 학점 배열
+        let colors = ["blue", "green", "yellow", "magenta", "red"];
+        let grades = ["A", "B", "C", "D", "F"];
+
+        function drawChart() {
+            let canvas = document.getElementById("myCanvas");
+            let context = canvas.getContext("2d");
+
+            // 1. 이전 차트 지우기 (힌트 조건)
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 2. input 태그들로부터 값 읽어오기
+            let values = [
+                Number(document.getElementById("gradeA").value),
+                Number(document.getElementById("gradeB").value),
+                Number(document.getElementById("gradeC").value),
+                Number(document.getElementById("gradeD").value),
+                Number(document.getElementById("gradeF").value)
+            ];
+
+            // 3. 총 학생 수 계산
+            let total = 0;
+            for (let i = 0; i < values.length; i++) {
+                total += values[i];
+            }
+
+            // 총 학생 수가 0명인 경우 예외 처리
+            if (total === 0) {
+                alert("학생 수를 1명 이상 입력해 주세요.");
+                return;
+            }
+
+            // 파이 차트 중심점 및 반지름 설정
+            let centerX = 320;
+            let centerY = 230;
+            let radius = 140;
+
+            let startAngle = 0; // 시작 각도 (0 rad = 3시 방향)
+
+            // 4. 파이 차트 부채꼴 그리기
+            for (let i = 0; i < values.length; i++) {
+                if (values[i] <= 0) continue; // 입력값이 0 이하이면 그리지 않음
+
+                // 부채꼴 각도 계산: (학생 수 / 총 학생 수) * 2π
+                let sliceAngle = (values[i] / total) * 2 * Math.PI;
+
+                context.beginPath();
+                context.moveTo(centerX, centerY);
+                context.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+                context.closePath();
+
+                context.fillStyle = colors[i];
+                context.fill();
+
+                // 다음 조각의 시작 각도 업데이트
+                startAngle += sliceAngle;
+            }
+
+            // 5. 좌측 상단 범례 텍스트 그리기
+            context.font = "15px sans-serif";
+            let textX = 20;
+            let textY = 40;
+
+            for (let i = 0; i < values.length; i++) {
+                // 비율 계산: $\text{비율(\%)} = \text{round}\left(\frac{\text{학생 수}}{\text{전체 학생 수}} \times 100\right)$
+                let percent = Math.round((values[i] / total) * 100);
+
+                context.fillStyle = colors[i];
+                context.fillText(`${grades[i]} 학점${percent}% : ${colors[i]}`, textX, textY);
+                
+                textY += 22; // 다음 줄 위치로 이동
+            }
+        }
+
+        // 페이지가 처음 로드되었을 때 기본값으로 차트 한번 그리기
+        window.onload = drawChart;
+    </script>
+
+</body>
+</html>
